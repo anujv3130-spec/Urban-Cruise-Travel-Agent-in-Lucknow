@@ -133,7 +133,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- **Project Link**: [https://github.com/yourusername/urban](https://github.com/yourusername/urban)
+- **Project Link**: [https://github.com/anujv3130-spec/urban](https://github.com/anujv3130-spec/urban)
 - **WhatsApp**: +91 9260994765
 - **Email**: info@urbancruise.com
 
