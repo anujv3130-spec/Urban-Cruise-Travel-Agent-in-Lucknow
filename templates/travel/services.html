@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Services - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Our Services</h1>
+        <p class="lead text-muted">Comprehensive travel solutions for every journey</p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="row">
+        <!-- Airport Cab Taxi Services -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-plane-arrival fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Airport Cab Taxi Services</h3>
+                    <p class="card-text">Reliable airport pickup and drop-off services. 24/7 availability for outstation and local airport transfers.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Airport Pickup & Drop</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Outstation Travel</li>
+                        <li><i class="fas fa-check text-success me-2"></i>24/7 Availability</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Professional Drivers</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Luggage Assistance</li>
+                        <li><i class="fas fa-check text-success me-2"></i>GPS Tracking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car Hire -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-car fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Car Hire</h3>
+                    <p class="card-text">Self-drive and chauffeur-driven cars for all your travel needs. Wide range of vehicles from economy to luxury.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Economy Cars</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Luxury Vehicles</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Self-Drive Options</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Chauffeur Service</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Corporate Trips -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-briefcase fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Corporate Trips</h3>
+                    <p class="card-text">Professional travel solutions for businesses. Team building, conferences, and corporate retreats.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Team Building</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Conference Travel</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Corporate Retreats</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Business Class</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Couples Trips -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-heart fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Couples Trips</h3>
+                    <p class="card-text">Romantic getaways and adventures for two. Create unforgettable memories with your loved one.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Romantic Destinations</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Couple Activities</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Private Tours</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Dining Experiences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destination Weddings -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-ring fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Destination Weddings</h3>
+                    <p class="card-text">Dream weddings at beautiful destinations. Complete wedding planning and coordination services.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Wedding Planning</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Venue Selection</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Guest Management</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Photography & Video</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Trips -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-users fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Family Trips</h3>
+                    <p class="card-text">Family-friendly vacations with activities for all ages. Create lasting memories together.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Kid-Friendly Destinations</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Family Activities</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Multi-Generational</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Safety First</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Travel -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-user-friends fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Group Travel</h3>
+                    <p class="card-text">Group tours and travel packages. Special discounts for groups and customized itineraries.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Group Discounts</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Custom Itineraries</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Group Coordinator</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Shared Experiences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Honeymoons -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-heart-broken fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Honeymoons</h3>
+                    <p class="card-text">Romantic honeymoon packages to exotic destinations. Start your new journey in paradise.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Exotic Destinations</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Romantic Packages</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Private Accommodation</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Special Experiences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tours -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-map-marked-alt fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Tours</h3>
+                    <p class="card-text">Guided tours to popular destinations. Expert guides and curated experiences.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Guided Tours</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Expert Guides</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Curated Experiences</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Small Groups</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car Rental -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 service-card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="service-icon mb-3">
+                        <i class="fas fa-key fa-3x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Car Rental</h3>
+                    <p class="card-text">Flexible car rental solutions. Daily, weekly, and monthly rental options available.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>Daily Rentals</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Weekly Options</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Monthly Plans</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Insurance Included</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white rounded mt-5">
+        <div class="text-center">
+            <h2 class="mb-4">Ready to Plan Your Journey?</h2>
+            <p class="lead mb-4">Contact us today for a personalized travel experience</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'contact' %}" class="btn btn-light btn-lg">Contact Us</a>
+                <a href="{% url 'tours' %}" class="btn btn-outline-light btn-lg">Browse Services</a>
+                <a href="https://wa.me/919260994765?text=Hi%20URBAN%20CRUISE!%20I%20need%20help%20with%20travel%20services." target="_blank" class="btn btn-success btn-lg">
+                    <i class="fab fa-whatsapp me-2"></i>WhatsApp Us
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.service-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    color: white;
+}
+
+.service-icon i {
+    color: white !important;
+}
+
+.list-unstyled li {
+    padding: 3px 0;
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}

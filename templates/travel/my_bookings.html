@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<style>
+.booking-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: linear-gradient(135deg, #c82333, #a02622);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-cancel:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.alert {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+</style>
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold mb-4">My Bookings</h1>
+            <p class="text-muted mb-4">View and manage your tour bookings</p>
+        </div>
+    </div>
+
+    {% if bookings %}
+        <div class="row">
+            {% for booking in bookings %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow mb-4 booking-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title">{{ booking.tour.title }}</h5>
+                            <span class="badge bg-{{ booking.status|yesno:'success,warning,danger' }}">
+                                {{ booking.get_status_display|title }}
+                            </span>
+                        </div>
+                        
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ booking.tour.destination.name }}
+                        </p>
+                        
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-users me-2"></i>{{ booking.travelers_count }} traveler{{ booking.travelers_count|pluralize }}
+                        </p>
+                        
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-clock me-2"></i>{{ booking.tour.duration }} days
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="h5 text-primary fw-bold">₹{{ booking.total_price }}</span>
+                                <small class="text-muted">total</small>
+                            </div>
+                            <small class="text-muted">Booked: {{ booking.booking_date|date:"M d, Y" }}</small>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#bookingDetail{{ booking.id }}">
+                                View Details
+                            </button>
+                            {% if booking.status == 'confirmed' %}
+                                <a href="{% url 'download_ticket' booking.id %}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download Ticket
+                                </a>
+                            {% endif %}
+                            {% if booking.status == 'pending' %}
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelBooking{{ booking.id }}">
+                                    Cancel Booking
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Detail Modal -->
+            <div class="modal fade" id="bookingDetail{{ booking.id }}" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Booking Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Tour Information</h6>
+                                    <p><strong>Tour:</strong> {{ booking.tour.title }}</p>
+                                    <p><strong>Destination:</strong> {{ booking.tour.destination.name }}</p>
+                                    <p><strong>Duration:</strong> {{ booking.tour.duration }} days</p>
+                                    <p><strong>Price per person:</strong> ₹{{ booking.tour.price }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Booking Information</h6>
+                                    <p><strong>Travelers:</strong> {{ booking.travelers_count }}</p>
+                                    <p><strong>Total Price:</strong> ₹{{ booking.total_price }}</p>
+                                    <p><strong>Status:</strong> {{ booking.get_status_display|title }}</p>
+                                    <p><strong>Booking Date:</strong> {{ booking.booking_date|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Contact Information</h6>
+                                    <p><strong>Email:</strong> {{ booking.contact_email }}</p>
+                                    <p><strong>Phone:</strong> {{ booking.contact_phone }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Special Requests</h6>
+                                    <p>{{ booking.special_requests|default:"None" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            {% if booking.status == 'confirmed' %}
+                                <a href="{% url 'download_ticket' booking.id %}" class="btn btn-success">
+                                    <i class="fas fa-download me-1"></i>Download Ticket
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancel Booking Modal -->
+            {% if booking.status == 'pending' %}
+            <div class="modal fade" id="cancelBooking{{ booking.id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cancel Booking</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to cancel your booking for {{ booking.tour.title }}?</p>
+                            <p class="text-muted">This action cannot be undone. Refunds will be processed according to our cancellation policy.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Booking</button>
+                            <form action="{% url 'cancel_booking' booking.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-cancel">
+                                    <i class="fas fa-times me-2"></i>Cancel Booking
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Bookings Yet</h4>
+                    <p class="text-muted mb-4">You haven't made any bookings yet. Start exploring our amazing tours!</p>
+                    <a href="{% url 'tours' %}" class="btn btn-primary btn-lg">Browse Tours</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle modal close after successful cancellation
+    const cancelForms = document.querySelectorAll('form[action*="cancel-booking"]');
+    cancelForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Cancelling...';
+            submitBtn.disabled = true;
+            
+            // Close modal after a short delay
+            setTimeout(() => {
+                const modal = form.closest('.modal');
+                if (modal) {
+                    const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                    if (bootstrapModal) {
+                        bootstrapModal.hide();
+                    }
+                }
+            }, 1000);
+        });
+    });
+    
+    // Handle success messages and page reload
+    const alerts = document.querySelectorAll('.alert-success');
+    if (alerts.length > 0) {
+        // Scroll to top to show success message
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Reload page after 2 seconds to show updated booking status
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    }
+});
+</script>
+{% endblock %}

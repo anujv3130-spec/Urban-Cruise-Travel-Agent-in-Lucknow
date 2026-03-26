@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}Tours - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Available Tours</h1>
+        <p class="lead text-muted">Find your perfect travel experience</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <select class="form-select" id="typeFilter">
+                <option value="">All Types</option>
+                {% for type, label in tour_types %}
+                <option value="{{ type }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="durationFilter">
+                <option value="">All Durations</option>
+                <option value="1">1 Day</option>
+                <option value="2-3">2-3 Days</option>
+                <option value="7">1 Week</option>
+                <option value="14+">2+ Weeks</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="priceFilter">
+                <option value="">All Prices</option>
+                <option value="0-40000">Under ₹40,000</option>
+                <option value="40000-80000">₹40,000 - ₹80,000</option>
+                <option value="80000-160000">₹80,000 - ₹1,60,000</option>
+                <option value="160000+">₹1,60,000+</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search tours..." id="searchInput">
+        </div>
+    </div>
+
+    <!-- Tours Grid -->
+    <div class="row" id="toursGrid">
+        {% for tour in tours %}
+        <div class="col-md-6 col-lg-4 mb-4 tour-item" 
+             data-type="{{ tour.tour_type }}" 
+             data-duration="{{ tour.duration }}"
+             data-price="{{ tour.price }}"
+             data-name="{{ tour.title|lower }}"
+             data-destination="{{ tour.destination.name|lower }}">
+            <div class="card h-100 shadow-sm tour-card">
+                <div class="position-relative">
+                    {% if tour.image %}
+                    <img src="{{ tour.image.url }}" class="card-img-top" alt="{{ tour.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                        <i class="fas fa-route fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    {% if tour.featured %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark">Featured</span>
+                    {% endif %}
+                    <div class="position-absolute bottom-0 start-0 m-2">
+                        <span class="badge bg-primary">{{ tour.get_tour_type_display }}</span>
+                    </div>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ tour.title }}</h5>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ tour.destination.name }}
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-clock me-2"></i>{{ tour.duration }} days
+                        <span class="ms-3"><i class="fas fa-users me-1"></i>{{ tour.available_spots }} spots left</span>
+                    </p>
+                    <p class="card-text flex-grow-1">{{ tour.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <div>
+                            <span class="h5 text-primary fw-bold">₹{{ tour.price }}</span>
+                            <small class="text-muted">/person</small>
+                        </div>
+                        <a href="{% url 'tour_detail' tour.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <div class="py-5">
+                <i class="fas fa-suitcase fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No tours found</h4>
+                <p class="text-muted">Try adjusting your filters or check back later!</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Tour pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+            
+            <li class="page-item active">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+            
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const typeFilter = document.getElementById('typeFilter');
+    const durationFilter = document.getElementById('durationFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const searchInput = document.getElementById('searchInput');
+    const tourItems = document.querySelectorAll('.tour-item');
+
+    function filterTours() {
+        const selectedType = typeFilter.value;
+        const selectedDuration = durationFilter.value;
+        const selectedPrice = priceFilter.value;
+        const searchTerm = searchInput.value.toLowerCase();
+
+        tourItems.forEach(item => {
+            const type = item.dataset.type;
+            const duration = parseInt(item.dataset.duration);
+            const price = parseFloat(item.dataset.price);
+            const name = item.dataset.name;
+            const destination = item.dataset.destination;
+
+            let matchesType = !selectedType || type === selectedType;
+            let matchesDuration = !selectedDuration;
+            let matchesPrice = !selectedPrice;
+            let matchesSearch = !searchTerm || name.includes(searchTerm) || destination.includes(searchTerm);
+
+            // Duration filter logic
+            if (selectedDuration) {
+                if (selectedDuration === '1') {
+                    matchesDuration = duration === 1;
+                } else if (selectedDuration === '2-3') {
+                    matchesDuration = duration >= 2 && duration <= 3;
+                } else if (selectedDuration === '7') {
+                    matchesDuration = duration === 7;
+                } else if (selectedDuration === '14+') {
+                    matchesDuration = duration >= 14;
+                }
+            }
+
+            // Price filter logic
+            if (selectedPrice) {
+                if (selectedPrice === '0-500') {
+                    matchesPrice = price < 500;
+                } else if (selectedPrice === '500-1000') {
+                    matchesPrice = price >= 500 && price < 1000;
+                } else if (selectedPrice === '1000-2000') {
+                    matchesPrice = price >= 1000 && price < 2000;
+                } else if (selectedPrice === '2000+') {
+                    matchesPrice = price >= 2000;
+                }
+            }
+
+            if (matchesType && matchesDuration && matchesPrice && matchesSearch) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    typeFilter.addEventListener('change', filterTours);
+    durationFilter.addEventListener('change', filterTours);
+    priceFilter.addEventListener('change', filterTours);
+    searchInput.addEventListener('input', filterTours);
+});
+</script>
+
+<!-- WhatsApp & Call Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Need Help Choosing a Tour?</h2>
+            <p class="lead">Our travel experts can help you find the perfect tour for your needs</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-phone fa-3x"></i>
+                    </div>
+                    <h4>Call Us Now</h4>
+                    <p class="mb-3">Get personalized tour recommendations</p>
+                    <a href="tel:+919260994765" class="btn btn-light btn-lg">
+                        <i class="fas fa-phone me-2"></i>Call +91 9260994765
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fab fa-whatsapp fa-3x"></i>
+                    </div>
+                    <h4>WhatsApp Us</h4>
+                    <p class="mb-3">Quick tour information and booking</p>
+                    <a href="https://wa.me/919260994765?text=Hi%20URBAN%20CRUISE!%20I%20need%20help%20choosing%20a%20tour." target="_blank" class="btn btn-success btn-lg">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp +91 9260994765
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

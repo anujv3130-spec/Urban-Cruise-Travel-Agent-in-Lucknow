@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow mb-4 profile-card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-circle fa-5x text-primary"></i>
+                    </div>
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                    <hr>
+                    <div class="text-start">
+                        <p><strong>Member Since:</strong> {{ user.date_joined|date:"M d, Y" }}</p>
+                        <p><strong>Total Bookings:</strong> {{ user.bookings.count }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-success">Active</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card shadow mb-4 profile-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Update Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly>
+                                <small class="text-muted">Username cannot be changed</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <h6 class="mb-3">Change Password (Optional)</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="current_password" class="form-label">Current Password</label>
+                                <input type="password" class="form-control" id="current_password" name="current_password">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="new_password" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="new_password" name="new_password">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Profile
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-undo me-2"></i>Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    {% if user.bookings.exists %}
+                        <div class="list-group">
+                            {% for booking in user.bookings.all|slice:":5" %}
+                            <div class="list-group-item activity-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ booking.tour.title }}</h6>
+                                        <small class="text-muted">Booked on {{ booking.booking_date|date:"M d, Y" }}</small>
+                                    </div>
+                                    <span class="badge bg-{{ booking.status|yesno:'success,warning,danger' }}">
+                                        {{ booking.get_status_display|title }}
+                                    </span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'my_bookings' %}" class="btn btn-outline-primary">View All Bookings</a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-history fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">No recent activity</p>
+                            <a href="{% url 'tours' %}" class="btn btn-primary">Start Exploring</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[method="post"]');
+    const currentPassword = document.getElementById('current_password');
+    const newPassword = document.getElementById('new_password');
+    const confirmPassword = document.getElementById('confirm_password');
+    
+    form.addEventListener('submit', function(e) {
+        // Validate password fields if any password field is filled
+        if (currentPassword.value || newPassword.value || confirmPassword.value) {
+            if (!currentPassword.value) {
+                e.preventDefault();
+                alert('Please enter your current password');
+                currentPassword.focus();
+                return;
+            }
+            
+            if (!newPassword.value) {
+                e.preventDefault();
+                alert('Please enter a new password');
+                newPassword.focus();
+                return;
+            }
+            
+            if (!confirmPassword.value) {
+                e.preventDefault();
+                alert('Please confirm your new password');
+                confirmPassword.focus();
+                return;
+            }
+            
+            if (newPassword.value !== confirmPassword.value) {
+                e.preventDefault();
+                alert('New passwords do not match!');
+                confirmPassword.focus();
+                return;
+            }
+            
+            if (newPassword.value.length < 8) {
+                e.preventDefault();
+                alert('Password must be at least 8 characters long');
+                newPassword.focus();
+                return;
+            }
+        }
+        
+        // Confirm email change
+        const emailField = document.getElementById('email');
+        if (emailField.value !== '{{ user.email }}') {
+            if (!confirm('Are you sure you want to change your email address?')) {
+                e.preventDefault();
+                emailField.focus();
+                return;
+            }
+        }
+    });
+    
+    // Password strength indicator
+    newPassword.addEventListener('input', function() {
+        const password = this.value;
+        const strength = checkPasswordStrength(password);
+        updatePasswordStrength(strength);
+    });
+    
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        if (password.length >= 8) strength++;
+        if (password.match(/[a-z]+/)) strength++;
+        if (password.match(/[A-Z]+/)) strength++;
+        if (password.match(/[0-9]+/)) strength++;
+        if (password.match(/[$@#&!]+/)) strength++;
+        return strength;
+    }
+    
+    function updatePasswordStrength(strength) {
+        const strengthText = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'][strength] || '';
+        const strengthColor = ['danger', 'warning', 'info', 'success', 'success'][strength] || '';
+        
+        // Remove existing strength indicator
+        const existing = document.getElementById('password-strength');
+        if (existing) existing.remove();
+        
+        if (password.value) {
+            const strengthDiv = document.createElement('div');
+            strengthDiv.id = 'password-strength';
+            strengthDiv.className = `alert alert-${strengthColor} mt-2`;
+            strengthDiv.innerHTML = `<small>Password Strength: ${strengthText}</small>`;
+            newPassword.parentNode.appendChild(strengthDiv);
+        }
+    }
+});
+</script>
+
+<style>
+.profile-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0b5ed7, #0a58ca);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+}
+
+.alert {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.password-strength-indicator {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.activity-item {
+    transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Destinations - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Explore Destinations</h1>
+        <p class="lead text-muted">Discover amazing places around the world</p>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search destinations..." id="searchInput">
+                <button class="btn btn-outline-primary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <select class="form-select" id="countryFilter">
+                <option value="">All Countries</option>
+                {% for country in countries %}
+                <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Destinations Grid -->
+    <div class="row" id="destinationsGrid">
+        {% for destination in destinations %}
+        <div class="col-md-6 col-lg-4 mb-4 destination-item" data-country="{{ destination.country }}" data-name="{{ destination.name|lower }}">
+            <div class="card h-100 shadow-sm destination-card">
+                {% if destination.image %}
+                <img src="{{ destination.image.url }}" class="card-img-top" alt="{{ destination.name }}" style="height: 250px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                    <i class="fas fa-map-marked-alt fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title">{{ destination.name }}</h5>
+                        {% if destination.featured %}
+                        <span class="badge bg-warning text-dark">Featured</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ destination.country }}
+                    </p>
+                    <p class="card-text flex-grow-1">{{ destination.description|truncatewords:25 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <small class="text-muted">
+                            <i class="fas fa-route me-1"></i>{{ destination.tours.count }} tours available
+                        </small>
+                        <div>
+                            <a href="{% url 'tours' %}" class="btn btn-outline-primary btn-sm me-2">View Tours</a>
+                            <a href="{% url 'tours' %}?destination={{ destination.name }}" class="btn btn-primary btn-sm">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <div class="py-5">
+                <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No destinations found</h4>
+                <p class="text-muted">Check back soon for new destinations!</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const countryFilter = document.getElementById('countryFilter');
+    const destinationItems = document.querySelectorAll('.destination-item');
+
+    function filterDestinations() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedCountry = countryFilter.value;
+
+        destinationItems.forEach(item => {
+            const name = item.dataset.name;
+            const country = item.dataset.country;
+            
+            const matchesSearch = name.includes(searchTerm);
+            const matchesCountry = !selectedCountry || country === selectedCountry;
+            
+            if (matchesSearch && matchesCountry) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    searchInput.addEventListener('input', filterDestinations);
+    countryFilter.addEventListener('change', filterDestinations);
+});
+</script>
+
+<!-- WhatsApp & Call Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Need Help Planning Your Trip?</h2>
+            <p class="lead">Our travel experts are ready to assist you with personalized recommendations</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-phone fa-3x"></i>
+                    </div>
+                    <h4>Call Us Now</h4>
+                    <p class="mb-3">Speak directly with our travel experts</p>
+                    <a href="tel:+919260994765" class="btn btn-light btn-lg">
+                        <i class="fas fa-phone me-2"></i>Call +91 9260994765
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fab fa-whatsapp fa-3x"></i>
+                    </div>
+                    <h4>WhatsApp Us</h4>
+                    <p class="mb-3">Chat with us for quick assistance</p>
+                    <a href="https://wa.me/919260994765" target="_blank" class="btn btn-light btn-lg">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp +91 9260994765
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

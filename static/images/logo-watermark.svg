@@ -1,0 +1,44 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Light Gradient for Watermark -->
+    <linearGradient id="watermarkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d6efd;stop-opacity:0.1" />
+      <stop offset="50%" style="stop-color:#198754;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#0d6efd;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Watermark Ship/Cruise Body -->
+  <path d="M40 125 L160 125 L150 140 L50 140 Z" fill="url(#watermarkGradient)"/>
+  <path d="M30 125 L170 125 L160 110 L40 110 Z" fill="url(#watermarkGradient)" opacity="0.8"/>
+  
+  <!-- Ship Details -->
+  <path d="M60 110 L140 110 L130 95 L70 95 Z" fill="url(#watermarkGradient)" opacity="0.7"/>
+  
+  <!-- Ship Windows -->
+  <circle cx="80" cy="102.5" r="7.5" fill="url(#watermarkGradient)" opacity="0.9"/>
+  <circle cx="100" cy="102.5" r="7.5" fill="url(#watermarkGradient)" opacity="0.9"/>
+  <circle cx="120" cy="102.5" r="7.5" fill="url(#watermarkGradient)" opacity="0.9"/>
+  
+  <!-- Ship Stack/Chimney -->
+  <rect x="90" y="80" width="20" height="15" fill="url(#watermarkGradient)" opacity="0.8"/>
+  <rect x="95" y="70" width="10" height="10" fill="url(#watermarkGradient)" opacity="0.7"/>
+  
+  <!-- Waves -->
+  <path d="M25 150 Q50 145, 75 150 T125 150 T175 150" stroke="url(#watermarkGradient)" stroke-width="10" fill="none" opacity="0.8"/>
+  <path d="M35 165 Q60 160, 85 165 T135 165 T165 165" stroke="url(#watermarkGradient)" stroke-width="7.5" fill="none" opacity="0.6"/>
+  
+  <!-- Sun -->
+  <circle cx="160" cy="40" r="15" fill="url(#watermarkGradient)" opacity="0.9"/>
+  <circle cx="160" cy="40" r="7.5" fill="url(#watermarkGradient)" opacity="0.8"/>
+  
+  <!-- Sun Rays -->
+  <path d="M160 15 L160 25" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M160 55 L160 65" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M135 40 L145 40" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M175 40 L185 40" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M145 20 L155 30" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M165 50 L175 60" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M145 60 L155 50" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+  <path d="M165 30 L175 20" stroke="url(#watermarkGradient)" stroke-width="5" opacity="0.7"/>
+</svg>

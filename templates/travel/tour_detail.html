@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tour.title }} - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <!-- Tour Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'tours' %}">Tours</a></li>
+                    <li class="breadcrumb-item active">{{ tour.title }}</li>
+                </ol>
+            </nav>
+            <h1 class="display-5 fw-bold mb-3">{{ tour.title }}</h1>
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <span class="badge bg-primary">{{ tour.get_tour_type_display }}</span>
+                <span class="text-muted"><i class="fas fa-map-marker-alt me-2"></i>{{ tour.destination.name }}, {{ tour.destination.country }}</span>
+                <span class="text-muted"><i class="fas fa-clock me-2"></i>{{ tour.duration }} days</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <span class="h3 text-primary fw-bold">₹{{ tour.price }}</span>
+                        <small class="text-muted d-block">per person</small>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                            <i class="fas fa-calendar-check me-2"></i>Book Now
+                        </button>
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-heart me-2"></i>Add to Wishlist
+                        </button>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between text-sm">
+                        <span class="text-muted">Available spots:</span>
+                        <span class="fw-bold">{{ tour.available_spots }}/{{ tour.max_travelers }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tour Image Gallery -->
+    <div class="row mb-5">
+        <div class="col-12">
+            {% if tour.image %}
+            <img src="{{ tour.image.url }}" class="img-fluid rounded shadow" alt="{{ tour.title }}" style="width: 100%; height: 400px; object-fit: cover;">
+            {% else %}
+            <div class="img-fluid rounded shadow bg-light d-flex align-items-center justify-content-center" style="width: 100%; height: 400px;">
+                <i class="fas fa-route fa-5x text-muted"></i>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tour Information -->
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Description -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">About This Tour</h4>
+                    <p class="card-text">{{ tour.description }}</p>
+                </div>
+            </div>
+
+            <!-- Itinerary -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Itinerary</h4>
+                    <div class="timeline">
+                        {% for day in "xxxxxxxxxxxxx" %}
+                            {% if forloop.counter <= tour.duration %}
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <h6>Day {{ forloop.counter }}</h6>
+                                    <p class="text-muted">Detailed itinerary for day {{ forloop.counter }} will be provided upon booking.</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Traveler Reviews</h4>
+                    {% for review in reviews %}
+                    <div class="review-item mb-4">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">{{ review.user.username }}</h6>
+                                    <small class="text-muted">{{ review.created_at|date:"M d, Y" }}</small>
+                                </div>
+                                <div class="mb-2">
+                                    {% for i in "xxxxx" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <p class="mb-0">{{ review.comment }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No reviews yet. Be the first to review this tour!</p>
+                    {% endfor %}
+                    
+                    {% if user.is_authenticated %}
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                        <i class="fas fa-star me-2"></i>Write a Review
+                    </button>
+                    {% else %}
+                    <p class="text-muted"><a href="{% url 'login' %}">Login</a> to write a review.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Destination Info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Destination Information</h5>
+                    {% if tour.destination.image %}
+                    <img src="{{ tour.destination.image.url }}" class="img-fluid rounded mb-3" alt="{{ tour.destination.name }}" style="width: 100%; height: 150px; object-fit: cover;">
+                    {% else %}
+                    <div class="img-fluid rounded bg-light d-flex align-items-center justify-content-center mb-3" style="width: 100%; height: 150px;">
+                        <i class="fas fa-map-marked-alt fa-2x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <h6>{{ tour.destination.name }}</h6>
+                    <p class="text-muted">{{ tour.destination.description|truncatewords:30 }}</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
+                </div>
+            </div>
+
+            <!-- Tour Highlights -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Tour Highlights</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Professional guide</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Small group size</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>All entrance fees included</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Transportation included</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Free cancellation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- What's Included -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">What's Included</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Accommodation</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Meals as specified</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Transportation</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Guide services</li>
+                        <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Flights</li>
+                        <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Travel insurance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book {{ tour.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'book_tour' tour.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="travelers" class="form-label">Number of Travelers</label>
+                                <select class="form-select" name="travelers_count" id="travelers" required>
+                                    {% for i in "xxxxxxxxxxxx" %}
+                                        {% if forloop.counter <= tour.available_spots %}
+                                        <option value="{{ forloop.counter }}">{{ forloop.counter }}{% if forloop.counter == 1 %} person{% else %} people{% endif %}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="contact_email" id="email" value="{{ user.email|default:'' }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" name="contact_phone" id="phone" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="special_requests" class="form-label">Special Requests</label>
+                                <textarea class="form-control" name="special_requests" id="special_requests" rows="6"></textarea>
+                            </div>
+                            <div class="alert alert-info">
+                                <h6>Booking Summary</h6>
+                                <p class="mb-1"><strong>Tour:</strong> {{ tour.title }}</p>
+                                <p class="mb-1"><strong>Duration:</strong> {{ tour.duration }} days</p>
+                                <p class="mb-1"><strong>Price per person:</strong> ₹{{ tour.price }}</p>
+                                <p class="mb-0"><strong>Total:</strong> <span id="totalPrice">₹{{ tour.price }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Review Modal -->
+{% if user.is_authenticated %}
+<div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Write a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'add_review' tour.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select class="form-select" name="rating" id="rating" required>
+                            <option value="">Select a rating</option>
+                            <option value="5">5 Stars - Excellent</option>
+                            <option value="4">4 Stars - Very Good</option>
+                            <option value="3">3 Stars - Good</option>
+                            <option value="2">2 Stars - Fair</option>
+                            <option value="1">1 Star - Poor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Your Review</label>
+                        <textarea class="form-control" name="comment" id="comment" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.getElementById('travelers').addEventListener('change', function() {
+    const tourPrice = parseFloat("{{ tour.price }}");
+    const travelers = parseInt(this.value);
+    const total = tourPrice * travelers;
+    document.getElementById('totalPrice').textContent = '₹' + total.toLocaleString('en-IN');
+});
+</script>
+
+<!-- WhatsApp & Call Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Questions About This Tour?</h2>
+            <p class="lead">Our travel experts are here to help you with any questions about this tour</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-phone fa-3x"></i>
+                    </div>
+                    <h4>Call Us Now</h4>
+                    <p class="mb-3">Get detailed information about this tour</p>
+                    <a href="tel:+919260994765" class="btn btn-light btn-lg">
+                        <i class="fas fa-phone me-2"></i>Call +91 9260994765
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fab fa-whatsapp fa-3x"></i>
+                    </div>
+                    <h4>WhatsApp Us</h4>
+                    <p class="mb-3">Quick answers and tour customization</p>
+                    <a href="https://wa.me/919260994765?text=Hi%20URBAN%20CRUISE!%20I%20have%20questions%20about%20the%20{{ tour.title|urlencode }}%20tour." target="_blank" class="btn btn-light btn-lg">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp +91 9260994765
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

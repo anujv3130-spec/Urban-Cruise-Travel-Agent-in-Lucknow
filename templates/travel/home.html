@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - URBAN CRUISE{% endblock %}
+
+{% block content %}
+<style>
+.hero-logo {
+    text-align: center;
+    animation: floatLogo 3s ease-in-out infinite;
+}
+
+.hero-logo-image {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    transition: all 0.3s ease;
+}
+
+.hero-logo-image:hover {
+    transform: scale(1.1) rotate(5deg);
+    filter: drop-shadow(0 6px 12px rgba(13, 110, 253, 0.6));
+}
+
+@keyframes floatLogo {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 768px) {
+    .hero-logo-image {
+        width: 60px !important;
+        height: 60px !important;
+    }
+}
+</style>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container-fluid p-0">
+        <div class="carousel slide" id="heroCarousel" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');">
+                        <div class="hero-content">
+                            <h1 class="display-3 fw-bold text-white mb-4">Discover Your Next Adventure</h1>
+                            <p class="lead text-white mb-4">Explore the world's most amazing destinations with URBAN CRUISE</p>
+                            <a href="{% url 'tours' %}" class="btn btn-primary btn-lg me-3">Explore Tours</a>
+                            <a href="{% url 'destinations' %}" class="btn btn-outline-light btn-lg">View Destinations</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1507525428034-b723a9ce6890?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');">
+                        <div class="hero-content">
+                            <h1 class="display-3 fw-bold text-white mb-4">Urban Exploration</h1>
+                            <p class="lead text-white mb-4">Experience the vibrant culture of cities around the globe</p>
+                            <a href="{% url 'tours' %}" class="btn btn-primary btn-lg me-3">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80');">
+                        <div class="hero-content">
+                            <h1 class="display-3 fw-bold text-white mb-4">Nature & Adventure</h1>
+                            <p class="lead text-white mb-4">Embark on thrilling outdoor experiences</p>
+                            <a href="{% url 'tours' %}" class="btn btn-primary btn-lg me-3">Start Adventure</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Destinations -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Featured Destinations</h2>
+            <p class="lead text-muted">Discover our handpicked selection of amazing places</p>
+        </div>
+        <div class="row">
+            {% for destination in featured_destinations %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm destination-card">
+                    {% if destination.image %}
+                    <img src="{{ destination.image.url }}" class="card-img-top" alt="{{ destination.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                        <i class="fas fa-map-marked-alt fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ destination.name }}</h5>
+                        <p class="text-muted"><i class="fas fa-map-marker-alt me-2"></i>{{ destination.country }}</p>
+                        <p class="card-text">{{ destination.description|truncatewords:20 }}</p>
+                        <a href="{% url 'destinations' %}" class="btn btn-outline-primary">Explore</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No featured destinations available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'destinations' %}" class="btn btn-primary btn-lg">View All Destinations</a>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Tours -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Popular Tours</h2>
+            <p class="lead text-muted">Join our most sought-after travel experiences</p>
+        </div>
+        <div class="row">
+            {% for tour in popular_tours %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm tour-card">
+                    {% if tour.image %}
+                    <img src="{{ tour.image.url }}" class="card-img-top" alt="{{ tour.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                        <i class="fas fa-route fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title">{{ tour.title }}</h5>
+                            <span class="badge bg-primary">{{ tour.get_tour_type_display }}</span>
+                        </div>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ tour.destination.name }}
+                            <span class="ms-3"><i class="fas fa-clock me-1"></i>{{ tour.duration }} days</span>
+                        </p>
+                        <p class="card-text flex-grow-1">{{ tour.description|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div>
+                                <span class="h5 text-primary fw-bold">₹{{ tour.price }}</span>
+                                <small class="text-muted">/person</small>
+                            </div>
+                            <a href="{% url 'tour_detail' tour.id %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No tours available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'tours' %}" class="btn btn-outline-primary btn-lg me-2">Browse All Tours</a>
+            <a href="{% url 'contact' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-phone me-1"></i>Contact Us
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">What Our Travelers Say</h2>
+            <p class="lead text-muted">Real experiences from real adventurers</p>
+        </div>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 bg-white shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% for i in "xxxxx" %}
+                                {% if forloop.counter <= testimonial.rating %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                    <i class="far fa-star text-warning"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="card-text">"{{ testimonial.message|truncatewords:30 }}"</p>
+                        <div class="d-flex align-items-center">
+                            {% if testimonial.image %}
+                                <img src="{{ testimonial.image.url }}" class="rounded-circle me-3" alt="{{ testimonial.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0">{{ testimonial.name }}</h6>
+                                <small class="text-muted">Verified Traveler</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No testimonials available yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Ready for Your Next Adventure?</h2>
+        <p class="lead mb-4">Join thousands of satisfied travelers who have explored the world with us</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{% url 'tours' %}" class="btn btn-light btn-lg">Browse Tours</a>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Auto Quick Inquiry Modal -->
+<div class="modal fade" id="autoInquiryModal" tabindex="-1" aria-labelledby="autoInquiryModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="autoInquiryModalLabel">
+                    <i class="fas fa-comments me-2"></i>Quick Inquiry
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="autoInquiryForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="autoName" class="form-label">Your Name *</label>
+                        <input type="text" class="form-control" id="autoName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="autoPhone" class="form-label">Phone Number *</label>
+                        <input type="tel" class="form-control" id="autoPhone" name="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="autoEmail" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="autoEmail" name="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="autoService" class="form-label">Service Interested In *</label>
+                        <select class="form-select" id="autoService" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="airport-cab">Airport Cab Taxi Services</option>
+                            <option value="car-hire">Car Hire</option>
+                            <option value="car-rental">Car Rental</option>
+                            <option value="car">Car Services</option>
+                            <option value="corporate-trips">Corporate Trips</option>
+                            <option value="couples-trips">Couples Trips</option>
+                            <option value="destination-weddings">Destination Weddings</option>
+                            <option value="family-trips">Family Trips</option>
+                            <option value="group-travel">Group Travel</option>
+                            <option value="honeymoons">Honeymoons</option>
+                            <option value="tours">Tours</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="autoMessage" class="form-label">Message</label>
+                        <textarea class="form-control" id="autoMessage" name="message" rows="3" placeholder="Tell us about your travel plans..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Maybe Later</button>
+                <button type="button" class="btn btn-success" id="submitAutoInquiry">
+                    <i class="fas fa-paper-plane me-2"></i>Send Inquiry
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-open modal after 3 seconds
+setTimeout(function() {
+    const autoModal = new bootstrap.Modal(document.getElementById('autoInquiryModal'));
+    autoModal.show();
+}, 3000);
+
+document.getElementById('submitAutoInquiry').addEventListener('click', function() {
+    const form = document.getElementById('autoInquiryForm');
+    const name = document.getElementById('autoName').value;
+    const phone = document.getElementById('autoPhone').value;
+    const email = document.getElementById('autoEmail').value;
+    const service = document.getElementById('autoService').value;
+    const message = document.getElementById('autoMessage').value;
+    
+    if (!name || !phone || !service) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    // Create WhatsApp message
+    const whatsappMessage = `*Quick Inquiry from URBAN CRUISE*%0A%0A*Name:* ${name}%0A*Phone:* ${phone}%0A*Email:* ${email || 'Not provided'}%0A*Service:* ${service}%0A*Message:* ${message || 'No message'}%0A%0APlease contact me for more information.`;
+    
+    // Open WhatsApp with pre-filled message
+    window.open(`https://wa.me/919260994765?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+    
+    // Close modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('autoInquiryModal'));
+    modal.hide();
+    
+    // Reset form
+    form.reset();
+});
+
+document.getElementById('closeContactBtn').addEventListener('click', function() {
+    const modal = bootstrap.Modal.getInstance(document.getElementById('autoInquiryModal'));
+    modal.hide();
+});
+</script>
+{% endblock %}

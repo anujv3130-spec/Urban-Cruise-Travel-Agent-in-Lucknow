@@ -1,0 +1,34 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="#f8f9fa"/>
+  
+  <!-- Car Body -->
+  <path d="M50 120 L50 100 Q50 90, 60 85 L100 80 Q120 78, 140 80 L180 85 Q190 90, 190 100 L190 120 Z" fill="url(#carGradient)" />
+  
+  <!-- Car Roof -->
+  <path d="M80 80 L80 60 Q80 50, 90 45 L150 45 Q160 50, 160 60 L160 80 Z" fill="url(#carGradient)" opacity="0.8" />
+  
+  <!-- Wheels -->
+  <circle cx="80" cy="130" r="15" fill="#333" />
+  <circle cx="80" cy="130" r="8" fill="#666" />
+  <circle cx="160" cy="130" r="15" fill="#333" />
+  <circle cx="160" cy="130" r="8" fill="#666" />
+  
+  <!-- Windows -->
+  <rect x="85" y="55" width="25" height="20" rx="5" fill="#87CEEB" opacity="0.7" />
+  <rect x="115" y="55" width="25" height="20" rx="5" fill="#87CEEB" opacity="0.7" />
+  
+  <!-- Headlights -->
+  <circle cx="195" cy="105" r="5" fill="#FFD700" />
+  <circle cx="45" cy="105" r="5" fill="#FF6347" />
+  
+  <!-- Text -->
+  <text x="150" y="170" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Car Rental Service</text>
+</svg>

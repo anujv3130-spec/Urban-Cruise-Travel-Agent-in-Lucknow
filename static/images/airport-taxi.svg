@@ -1,0 +1,47 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="airportGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#28a745;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#20c997;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="#f8f9fa"/>
+  
+  <!-- Airport Taxi -->
+  <path d="M50 130 L50 110 Q50 100, 60 95 L100 90 Q120 88, 140 90 L180 95 Q190 100, 190 110 L190 130 Z" fill="url(#airportGradient)" />
+  
+  <!-- Taxi Roof -->
+  <path d="M80 90 L80 70 Q80 60, 90 55 L150 55 Q160 60, 160 70 L160 90 Z" fill="url(#airportGradient)" opacity="0.8" />
+  
+  <!-- Airport Sign -->
+  <rect x="105" y="50" width="30" height="15" rx="3" fill="#28a745" />
+  <text x="120" y="60" font-family="Arial, sans-serif" font-size="6" font-weight="bold" text-anchor="middle" fill="white">AIRPORT</text>
+  
+  <!-- Luggage -->
+  <rect x="45" y="125" width="15" height="10" rx="2" fill="#8B4513" />
+  <rect x="62" y="127" width="12" height="8" rx="2" fill="#A0522D" />
+  
+  <!-- Wheels -->
+  <circle cx="80" cy="140" r="12" fill="#333" />
+  <circle cx="80" cy="140" r="6" fill="#666" />
+  <circle cx="160" cy="140" r="12" fill="#333" />
+  <circle cx="160" cy="140" r="6" fill="#666" />
+  
+  <!-- Windows -->
+  <rect x="85" y="65" width="25" height="20" rx="5" fill="#87CEEB" opacity="0.7" />
+  <rect x="115" y="65" width="25" height="20" rx="5" fill="#87CEEB" opacity="0.7" />
+  
+  <!-- Lights -->
+  <circle cx="195" cy="115" r="4" fill="#FFD700" />
+  <circle cx="45" cy="115" r="4" fill="#FF6347" />
+  
+  <!-- Airport Symbol -->
+  <circle cx="250" cy="50" r="15" fill="none" stroke="#28a745" stroke-width="2" />
+  <path d="M250 35 L250 65" stroke="#28a745" stroke-width="2" />
+  <path d="M235 50 L265 50" stroke="#28a745" stroke-width="2" />
+  
+  <!-- Text -->
+  <text x="150" y="180" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">Airport Taxi Service</text>
+</svg>
